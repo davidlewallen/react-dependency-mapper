@@ -29,6 +29,22 @@ function isPathToDirectory(path, currentDirectory) {
   );
 }
 
+function generateNextDirectory(isDirectory, currentDirectory, dependencyPath) {
+  if (isDirectory) {
+    return Path.resolve(currentDirectory, dependencyPath);
+  }
+
+  return currentDirectory;
+}
+
+function generateNextFilePath(isDirectory, currentDirectory, dependencyPath) {
+  if (isDirectory) {
+    return "index.jsx";
+  }
+
+  return `${Path.resolve(currentDirectory, dependencyPath)}.jsx`;
+}
+
 function mapImports(currentDirectory, currentFile, cwd = process.cwd()) {
   const currentAbsoluteDirectory = Path.resolve(cwd, currentDirectory);
   const currentPath = Path.resolve(currentAbsoluteDirectory, currentFile);
@@ -46,13 +62,19 @@ function mapImports(currentDirectory, currentFile, cwd = process.cwd()) {
       const { path: dependencyPath, name: dependencyName } = parseDependency(
         dependency
       );
+
       const isDirectory = isPathToDirectory(dependencyPath, currentDirectory);
-      const nextDirectory = isDirectory
-        ? Path.resolve(currentDirectory, dependencyPath)
-        : currentDirectory;
-      const nextFilePath = isDirectory
-        ? "index.jsx"
-        : `${Path.resolve(currentDirectory, dependencyPath)}.jsx`;
+
+      const nextDirectory = generateNextDirectory(
+        isDirectory,
+        currentDirectory,
+        dependencyPath
+      );
+      const nextFilePath = generateNextFilePath(
+        isDirectory,
+        currentDirectory,
+        dependencyPath
+      );
 
       result = {
         dependencyPath,
@@ -74,6 +96,4 @@ function mapImports(currentDirectory, currentFile, cwd = process.cwd()) {
   return parsedDependencies;
 }
 
-console.log(JSON.stringify(mapImports(directory, file), null, 2));
-
-// ! Notes: Look into parsing path by using Path.relative and passin in the 'dependencyPath'
+mapImports(directory, file);
