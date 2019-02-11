@@ -1,0 +1,12 @@
+{
+  "name": "react-dependency-mapper",
+  "version": "1.0.0",
+  "description": "A simple tool to visualize your react project based off file imports and data flow (state and props)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Lewallen",
+  "license": "ISC",
+  "dependencies": {}
+}
